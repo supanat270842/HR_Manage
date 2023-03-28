@@ -1,0 +1,105 @@
+@model ListHistoryViewModel
+
+<head>
+    <style>
+        .bg-thead {
+            text-align: left;
+            background: #B266FF;
+            color: #fff
+        }
+
+        .calloutbg {
+            text-align: left;
+            background: #4C75ED;
+            color: #fff
+        }
+        .callout.callout-warning1 {
+            border-left-color: #4C75ED;
+        }
+    </style>
+</head>
+
+<body class="hold-transition sidebar-mini >
+    <section class=" content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="callout callout-warning1 calloutbg">
+                            <h5>Report iOT CPS</h5>
+                            <p>เป็นรายงานดูการ Check in ตรวจสอบการทำ OT ผู้รับผิดชอบคือหัวหน้างาน โดยจะต้องทำรายการตรวจสอบทุกๆ 
+                                ชั่วโมง หาก OT ทำเกิน 1 ชั่วโมง แสดงว่าจะต้องตรวจสอบมากกว่า 1 ครั้ง มีเงื่อนไขคือ การ Check in 
+                                แต่ละครั้งจะต้องห่างกันเกิน 15 นาที ข้อมูลเอามาจาก Application iOT (AP2022-005-iOT) และ โปรแกรมขอ OT (WB2022-017-OTWeb)
+                            </p>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Check In ครั้งที่ @ViewBag.CountItem</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="card-body  table-responsive p-0" style="height: *;">
+                                        <table class="table table-bordered text-wrap">
+                                            <table id="example1" class="table  table-bordered">
+                                                <thead class="bg-thead">
+                                                    <tr>
+                                                        <th style="width: 200px" class="text-center">รูปภาพที่
+                                                        </th>
+                                                        <th style="width: 160px" class="text-center">รูปภาพ</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in (ViewBag.ListHistoryViewModel as
+                                                    IEnumerable<ListHistoryViewModel>))
+                                                    {
+                                                        <tr>
+                                                            <td class="text-center">@item.count</td>
+                                                            @if (!String.IsNullOrEmpty(@item.image))
+                                                            {
+                                                                <td>
+                                                                    <a asp-action="ViewImage" asp-controller="HistoryCPS"
+                                                                asp-route-headerQTDoc="@item.headerQTDoc"
+                                                                asp-route-imageAutoId="@item.imageAutoId"
+                                                                asp-route-docnumberImage="@item.docnumberImage"
+                                                                asp-route-_countItem="@item.itemTime"
+                                                                asp-route-_count="@item.count"
+                                                                asp-route-note="@item.note" target="_blank">
+                                                                        <img src="data:image/jpeg;base64,@item.image" alt="CCP"
+                                                                    height="150" width="150">
+                                                                    </a>
+                                                                </td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td></td>
+                                                            }
+
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+
+                                            </table>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</body>

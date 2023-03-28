@@ -1,0 +1,17 @@
+@model IEnumerable<ListHistoryViewModel>
+
+@{
+    Layout = null;
+}
+<div>
+    
+    @foreach (var item in Model)
+    {
+        <h2>เช็คอินครั้งที่ @ViewBag.CountItem</h2>
+        <p>
+            <h4> รูปที่ : @ViewBag.Count</h4>
+        </p>
+        <img src="data:image/jpeg;base64,@item.stfStreamId" alt="CCP" height="450" width="900">
+    }
+
+</div>

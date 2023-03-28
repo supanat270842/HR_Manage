@@ -1,0 +1,96 @@
+@model ListHistoryViewModel
+
+<head>
+    <style>
+        .bg-thead {
+            text-align: left;
+            background: #4C75ED;
+            color: #fff
+        }
+
+        .calloutbg {
+            text-align: left;
+            background: #4C75ED;
+            color: #fff
+        }
+
+        .callout.callout-warning1 {
+            border-left-color: #3350A1;
+        }
+    </style>
+</head>
+
+<body class="hold-transition sidebar-mini >
+    <section class=" content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="callout callout-warning1 calloutbg">
+                            <h5>Report iOT </h5>
+                            <p>เป็นรายงานดูการ Check in ตรวจสอบการทำ OT ผู้รับผิดชอบคือหัวหน้างาน โดยจะต้องทำรายการตรวจสอบทุกๆ 
+                                ชั่วโมง หาก OT ทำเกิน 1 ชั่วโมง แสดงว่าจะต้องตรวจสอบมากกว่า 1 ครั้ง มีเงื่อนไขคือ การ Check in 
+                                แต่ละครั้งจะต้องห่างกันเกิน 15 นาที ข้อมูลเอามาจาก Application iOT (AP2022-005-iOT) และ โปรแกรมขอ OT (WB2022-017-OTWeb)
+                            </p>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>ประวัติทั้งหมดของ เลขที่เอกสาร</label>
+                                    <input value="@ViewBag.DocNumber" type="text" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="card-body  table-responsive p-0" style="height: *;">
+                                        <table class="table table-bordered text-wrap">
+                                            <table id="example1" class="table  table-bordered">
+                                                <thead class="bg-thead">
+                                                    <tr>
+                                                        <th style="width: 200px" class="text-center">ลำดับที่
+                                                        </th>
+                                                        <th style="width: 160px" class="text-center">TrAutoId</th>
+                                                        <th style="width: 160px" class="text-center">เลขที่เอกสาร</th>
+                                                        <th style="width: 300px" class="text-center">TimeCheckin</th>
+                                                        <th style="width: 160px" class="text-center">ผู้ทำรายการ</th>
+                                                        <th style="width: 160px" class="text-center">หมายเหตุ</th>                                                      
+                                                        <th style="width: 160px" class="text-center">TrActivity</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in (ViewBag.ListHistoryViewModel as
+                                                    IEnumerable<ListHistoryViewModel>))
+                                                    {
+                                                        <tr>
+                                                            <td class="text-center">@item.trSlot</td>
+                                                            <td class="text-center">@item.trAutoId</td>
+                                                            <td class="text-center">@item.headerQtdoc</td>
+                                                            <td class="text-center">@item.trTimeCheckin</td>
+                                                            <td class="text-center">@item.trCreateBy</td>
+                                                            <td class="text-center">@item.reMark</td>
+                                                            <td class="text-center">@item.trActivity</td>
+
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+
+                                            </table>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

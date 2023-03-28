@@ -1,0 +1,195 @@
+@model ListOTViewModel
+<head>
+    <style>
+        .bg-thead {
+            text-align: left;
+            background: #4C75ED;
+            color: #fff
+        }
+        .calloutbg {
+            text-align: left;
+            background: #4C75ED;
+            color: #fff
+        }
+        .callout.callout-warning1 {
+            border-left-color: #3350A1;
+        }
+    </style>
+</head>
+
+<body class="hold-transition sidebar-mini >
+    <section class=" content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="callout callout-warning1 calloutbg">
+                            <h5>Report iOT</h5>
+                            <p>เป็นรายงานดูการ Check in ตรวจสอบการทำ OT ผู้รับผิดชอบคือหัวหน้างาน โดยจะต้องทำรายการตรวจสอบทุกๆ 
+                                ชั่วโมง หาก OT ทำเกิน 1 ชั่วโมง แสดงว่าจะต้องตรวจสอบมากกว่า 1 ครั้ง มีเงื่อนไขคือ การ Check in 
+                                แต่ละครั้งจะต้องห่างกันเกิน 15 นาที ข้อมูลเอามาจาก Application iOT (AP2022-005-iOT) และ โปรแกรมขอ OT (WB2022-017-OTWeb)
+                            </p>
+                        </div>
+                        <form asp-action="Index" asp-controller="OTCheckIn">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>โรงงาน</label>
+                                        <select asp-items="ViewBag.PlantList" class="form-control select2" id="dropdown" name="_factory"
+                                            style="width: 100%;" onchange="document.getElementById('btnSubmit').click();">
+                                            <option selected="selected">เลือกทั้งหมด</option>
+                                        </select>
+                                         <input id="btnSubmit" hidden type="submit" value="submit" />
+                                    </div>
+                                </div>
+                            </div>                           
+                                <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>แผนก</label>
+                                        <select asp-items="ViewBag.FacAndDepList" class="form-control" name="_department"
+                                            style="width: 100%;">
+                                            <option selected="selected">เลือกทั้งหมด</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>                                                   
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>วันที่เริ่มต้น</label>
+                                        <br>
+                                        <input value=@ViewBag.StartDate type="date" class="form-control"
+                                            name="_startDate">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>ถึงวันที่สิ้นสุด</label>
+                                        <br>
+                                        <input value=@ViewBag.EndDate type="date" class="form-control" name="_endDate">
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label></label>
+                                        <button type="submit" class="btn btn-block btn-info">ค้นหา</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="card-body  table-responsive p-0" style="height: *;">
+                                        <table class="table table-bordered text-wrap">
+                                            <table id="example1" class="table  table-bordered">
+                                                <thead class="bg-thead">
+                                                    <tr>
+                                                        <th style="width: 160px" class="text-center">เลขที่เอกสาร</th>
+                                                        <th style="width: 160px" class="text-center">วันที่เริ่มต้น</th>
+                                                        <th style="width: 160px" class="text-center">วันที่สิ้นสุด</th>
+                                                        <th style="width:  50px" class="text-center">Yard</th>
+                                                        <th style="width: 180px" class="text-center">ผู้รับผิดชอบ</th>
+                                                        <th style="width: 100px" class="text-center">จำนวนคน</th>
+                                                        <th style="width: 300px" class="text-center">รายละเอียด</th>
+                                                        <th style="width: 250px" class="text-center">ดูรายการ</th>                                                     
+                                                    </tr>
+                                                </thead>
+                                                
+                                                <tbody>
+                                                @{
+                                                    foreach (var item in (ViewBag.ListOTViewModel as
+                                                    IEnumerable<ListOTViewModel>))
+                                                    {
+                                                        <tr>
+                                                            <td class="text-center">@item.headerQTDoc</td>                                          
+                                                            <td class="text-center">@item.headerQTDateStAffect @item.headerQTTimeStAffect</td>
+                                                            <td class="text-center">@item.headerQTDateEnAffect @item.headerQTTimeEnAffect</td>                                 
+                                                            <td class="text-center">@item.headerQTNameYard</td>                                                                                                                                                                                 
+                                                            <td class="text-center">@item.headerQTLeaderName</td>
+                                                            <td class="text-center">@item.headerQTSumPersons</td>
+                                                            @if(!String.IsNullOrEmpty(@item._note))
+                                                            {
+                                                                <td class="text-center">@item._note</td> 
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="text-center">-</td> 
+                                                            }                                                        
+                                                            <td class="text-center">
+                                                                <a  asp-action="Index" 
+                                                                    asp-controller="Employee" 
+                                                                    asp-route-docNumber="@item.headerQTDoc"
+                                                                    target="_blank"                                                
+                                                                    class="btn btn-info">พนักงาน
+                                                                </a>                                                             
+                                                                <a  asp-action="Index"
+                                                                    asp-controller="History"
+                                                                    asp-route-headerQTDoc="@item.headerQTDoc"
+                                                                    asp-route-headerQTDateStAffect="@item.headerQTDateStAffect"                                                                                                                                                                                                                                                                                                                                          
+                                                                    asp-route-headerQTDateEnAffect="@item.headerQTDateEnAffect"                                                                    
+                                                                    asp-route-headerQTNameYard="@item.headerQTNameYard"
+                                                                    asp-route-headerQTLeaderName="@item.headerQTLeaderName"
+                                                                    asp-route-headerQTSumPersons="@item.headerQTSumPersons"
+                                                                    asp-route-_note="@item._note" 
+                                                                    target="_blank"                                                                                                                                       
+                                                                    class="btn btn-outline-dark">ประวัติ
+                                                                </a>
+                                                            </td>                                                                                                                                                                            
+                                                        </tr>                                                                                            
+                                                    }
+                                                }
+
+                                                </tbody>
+                                               
+                                            </table>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
+        integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
+        crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+        integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw=="
+        crossorigin="anonymous" />
+<style>
+    
+    .select2-selection__rendered {
+        line-height: 29px !important;
+        
+    }
+
+    .select2-container .select2-selection--single {
+        height: 35px !important;
+        width: 100%;
+    }
+
+    .select2-selection__arrow {
+        height: 34px !important;
+    }
+</style>
+<script>
+    $("#dropdown").select2({
+    });
+
+</script>
+
+</body>

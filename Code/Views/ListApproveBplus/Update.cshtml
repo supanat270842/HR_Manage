@@ -1,0 +1,257 @@
+@model ApproveBplusViewModel
+
+<head>
+    <style>
+        .bg-thead {
+            text-align: left;
+            background: #4C75ED;
+            color: #fff
+        }
+
+        .calloutbg {
+            text-align: left;
+            background: #4C75ED;
+            color: #fff
+        }
+
+        .callout.callout-warning1 {
+            border-left-color: #3350A1;
+        }
+    </style>
+    <script type="text/javascript">
+        function myFunction() {
+            checkboxes = document.getElementsByName('guy');
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].type == 'checkbox')
+                    checkboxes[i].checked = true;
+            }
+        }
+        function clrMyFunction() {
+            checkboxes = document.getElementsByName('guy');
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].type == 'checkbox')
+                    checkboxes[i].checked = false;
+            }
+        }
+    </script>
+</head>
+
+<body class="hold-transition sidebar-mini >
+    <section class=" content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="callout callout-warning1 calloutbg">
+                            <h5>ListApproveConditionBPlus</h5>
+                            <p>
+                                รายการที่ไม่ได้อยู่ในเงื่อนไข จะต้องผ่านการอนุมัติที่หน้านี้ เงื่อนไขมีดังนี้ <br>
+                                เวลาเริ่มต้น : 17.15 น. เวลาสิ้นสุด 19.15 น. ประเภท OT : ค่าล่วงเวลาX1.5(หลังเลิกงาน)
+                                <br>
+                                เวลาเริ่มต้น : 17.45 น. เวลาสิ้นสุด 20.15 น. ประเภท OT : ค่าล่วงเวลาX1.5(หลังเลิกงาน)
+                                <br>
+                                เวลาเริ่มต้น : 05.15 น. เวลาสิ้นสุด 07.45 น. ประเภท OT : ค่าล่วงเวลา*1.5(ก่อนเริ่มงาน)
+                                <br>
+                                เวลาเริ่มต้น : 06.15 น. เวลาสิ้นสุด 08.15 น. ประเภท OT : ค่าล่วงเวลา*1.5(ก่อนเริ่มงาน)
+
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="Update" asp-controller="ListApproveBplus">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>โรงงาน</label>
+                                        <select asp-items="ViewBag.PlantList" class="form-control select2" id="dropdown"
+                                            name="_factory" style="width: 100%;">
+                                            <option selected="selected">เลือกทั้งหมด</option>
+                                        </select>
+                                        <input id="btnSubmit" hidden type="submit" value="submit" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>วันที่ทำ OT เริ่มต้น</label>
+                                        <br>
+                                        <input value=@ViewBag.StartDate type="date" class="form-control"
+                                            name="_startDate">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>วันที่ทำ OT สิ้นสุด</label>
+                                        <br>
+                                        <input value=@ViewBag.EndDate type="date" class="form-control" name="_endDate">
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label></label>
+                                        <button type="submit" class="btn btn-block btn-info">ค้นหา</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row container">
+                                <div class="col-md-3.801px">
+                                    <div class="form-group">
+                                        <input type="button" onclick="myFunction()" class="btn btn-primary"
+                                            value="เลือกทั้งหมดในหน้านี้"> </input>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <input type="button" onclick="clrMyFunction()" class="btn btn-danger"
+                                            value="ลบการเลือก" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="card-body  table-responsive p-0" style="height: *;">
+                                            <table class="table table-bordered text-wrap">
+                                                <table id="example1" class="table  table-bordered">
+                                                    <thead class="bg-thead">
+                                                        <tr>
+                                                            <th style="width: 160px" class="text-center">Confirm</th>
+                                                            <th style="width: 160px" class="text-center">เลขที่เอกสาร
+                                                            </th>
+                                                            <th style="width: 160px" class="text-center">โรงงาน</th>
+                                                            <th style="width: 200px" class="text-center">ประเภท OT Bplus
+                                                            </th>
+                                                            <th style="width: 180px" class="text-center">เวลาเริ่มต้น
+                                                            </th>
+                                                            <th style="width: 100px" class="text-center">เวลาสิ้นสุด
+                                                            </th>
+                                                            <th style="width: 300px" class="text-center">รายละเอียด</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+
+                                                        @for (int i = 0; i < Model.itemOts.Count(); i++)
+                                                        {
+                                                            {
+                                                                <tr>
+                                                                    <td class="text-center">
+                                                                        @Html.CheckBoxFor(m => Model.itemOts[i].checkConfirm)
+                                                                        @* <input type="checkbox" name="guy" value="true"> *@
+                                                                    </td>
+                                                                    <td class="text-center">@Html.TextBoxFor(m =>
+                                                                Model.itemOts[i].HeaderQtdoc)</td>
+                                                                    <td class="text-center">@Html.TextBoxFor(m =>
+                                                                Model.itemOts[i].HeaderQtplant)</td>
+                                                                    <td class="text-center">@Html.TextBoxFor(m =>
+                                                                Model.itemOts[i].HeaderTypeOt)</td>
+                                                                    <td class="text-center">@Html.TextBoxFor(m =>
+                                                                Model.itemOts[i].HeaderQttimeStAffect)</td>
+                                                                    <td class="text-center">@Html.TextBoxFor(m =>
+                                                                Model.itemOts[i].HeaderQttimeEnAffect)</td>
+
+                                                                    <td class="text-center">
+                                                                        <a target="_blank"
+                                                                            href="https://ccpnext.com/OTWeb/EditHR?Doc=@Model.itemOts[i].HeaderQtdoc"
+                                                                            class="btn btn-warning">แก้ไข
+                                                                        </a>
+
+                                                                        <a target="_blank"
+                                                                            href="https://ccpnext.com/OTWEB/PrintOT?Doc=@Model.itemOts[i].HeaderQtdoc"
+                                                                            class="btn btn-info">ดูเอกสาร
+                                                                        </a>
+                                                                    </td>
+
+                                                                </tr>
+
+                                                            }
+                                                        }
+                                                        @* @foreach (var item in (ViewBag.ApproveBplusViewModel as
+                                                        IEnumerable<ApproveBplusViewModel>))
+                                                        {
+                                                        <tr>
+                                                        <td class="text-center">
+                                                        <input type="checkbox" name="guy" value="true">
+                                                        </td>
+                                                        <td class="text-center">@item.HeaderQtdoc</td>
+                                                        <td class="text-center">@item.HeaderQtplant</td>
+                                                        <td class="text-center">@item.HeaderTypeOt</td>
+                                                        <td class="text-center">@item.HeaderQttimeStAffect</td>
+                                                        <td class="text-center">@item.HeaderQttimeEnAffect</td>
+
+                                                        <td class="text-center">
+                                                        <a target="_blank"
+                                                        href="https://ccpnext.com/OTWeb/EditHR?Doc=@item.HeaderQtdoc"
+                                                        class="btn btn-warning">แก้ไข
+                                                        </a>
+
+                                                        <a target="_blank"
+                                                        href="https://ccpnext.com/OTWEB/PrintOT?Doc=@item.HeaderQtdoc"
+                                                        class="btn btn-info">ดูเอกสาร
+                                                        </a>
+                                                        </td>
+
+                                                        </tr>
+                                                        } *@
+                                                    </tbody>
+
+                                                </table>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row container">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label></label>
+                                            <button type="submit" class="btn btn-block btn-success">บันทึก</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
+        integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+        integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw=="
+        crossorigin="anonymous" />
+    <style>
+        .select2-selection__rendered {
+            line-height: 29px !important;
+
+        }
+
+        .select2-container .select2-selection--single {
+            height: 35px !important;
+            width: 100%;
+        }
+
+        .select2-selection__arrow {
+            height: 34px !important;
+        }
+    </style>
+    <script>
+        $("#dropdown").select2({
+        });
+
+    </script>
+
+</body>
